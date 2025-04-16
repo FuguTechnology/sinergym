@@ -110,6 +110,7 @@ class EplusEnv(gym.Env):
         self.meters = meters
         self.actuators = actuators
         self.context = context
+        self.initial_context = initial_context
 
         # ---------------------------------------------------------------------------- #
         #                    Define observation and action variables                   #
@@ -148,12 +149,17 @@ class EplusEnv(gym.Env):
         # last obs, action and info
         self.last_obs: Optional[Dict[str, float]] = None
         self.last_info: Optional[Dict[str, Any]] = None
-        self.last_action: Optional[np.ndarray] = None
+        self.last_action: Optional[Union[List[float],
+                                         np.ndarray, Tuple[Any], float, int]] = None
         self.last_context: Optional[Union[List[float], np.ndarray]] = None
 
         # ---------------------------------------------------------------------------- #
         #                                   Simulator                                  #
         # ---------------------------------------------------------------------------- #
+
+        # Set initial context if exists
+        if self.initial_context is not None:
+            self.update_context(self.initial_context)
 
         # EnergyPlus simulator
         self.energyplus_simulator = EnergyPlus(
@@ -176,8 +182,6 @@ class EplusEnv(gym.Env):
         # Weather Variability
         if weather_variability:
             self.default_options['weather_variability'] = weather_variability
-        if initial_context:
-            self.default_options['initial_context'] = initial_context
         # ... more reset option implementations here
 
         # ---------------------------------------------------------------------------- #
@@ -237,16 +241,16 @@ class EplusEnv(gym.Env):
         """
 
         # If global seed was configured, reset seed will not be applied.
-        if not self.seed:
+        if self.seed is None:
             np.random.seed(seed)
 
         # Apply options if exists, else default options
-        reset_options = options if options else self.default_options
+        reset_options = options if options is not None else self.default_options
 
         self.episode += 1
         self.timestep = 0
 
-        # Stop old thread of old episode if exists
+        # Stop oold thread of old episode if exists
         self.energyplus_simulator.stop()
 
         self.last_obs = dict(
@@ -277,15 +281,13 @@ class EplusEnv(gym.Env):
             f'Saving episode output path in {eplus_working_out_path}.')
         self.logger.debug(f'Path: {eplus_working_out_path}')
 
-        # Set initial context if exists
-        if reset_options.get('initial_context'):
-            self.update_context(reset_options['initial_context'])
-
         self.energyplus_simulator.start(
             building_path=eplus_working_building_path,
             weather_path=eplus_working_weather_path,
             output_path=eplus_working_out_path,
             episode=self.episode)
+
+        self.logger.info(f'Episode {self.episode} started.')
 
         # wait for E+ warmup to complete
         if not self.energyplus_simulator.warmup_complete:
@@ -295,40 +297,43 @@ class EplusEnv(gym.Env):
 
         # Wait to receive simulation first observation and info
         try:
-            obs = self.obs_queue.get(timeout=10)
+            obs = self.obs_queue.get(timeout=20)
         except Empty:  # pragma: no cover
             self.logger.warning(
-                'Reset: Observation queue empty, returning a random observation (not real). Probably EnergyPlus initialization is failing.')
+                'Reset: Observation queue empty, returning a random observation (not real).')
             obs = self.last_obs
 
         try:
-            info = self.info_queue.get(timeout=10)
+            info = self.info_queue.get(timeout=20)
         except Empty:  # pragma: no cover
             info = self.last_info
             self.logger.warning(
-                'Reset: info queue empty, returning an empty info dictionary (not real). Probably EnergyPlus initialization is failing.')
+                'Reset: info queue empty, returning an empty info dictionary (not real).')
 
         info.update({'timestep': self.timestep})
         self.last_obs = obs
         self.last_info = info
 
-        self.logger.info(f'Episode {self.episode} started.')
-
         self.logger.debug(f'RESET observation received: {obs}')
         self.logger.debug(f'RESET info received: {info}')
 
-        return np.fromiter(obs.values(), dtype=np.float32), info
+        return np.array(list(obs.values()), dtype=np.float32), info
 
     # ---------------------------------------------------------------------------- #
     #                                     STEP                                     #
     # ---------------------------------------------------------------------------- #
     def step(self,
-             action: np.ndarray
+             action: Union[int,
+                           float,
+                           np.integer,
+                           np.ndarray,
+                           List[Any],
+                           Tuple[Any]]
              ) -> Tuple[np.ndarray, float, bool, bool, Dict[str, Any]]:
         """Sends action to the environment.
 
         Args:
-            action (np.ndarray): Action selected by the agent.
+            action (Union[int, float, np.integer, np.ndarray, List[Any], Tuple[Any]]): Action selected by the agent.
 
         Returns:
             Tuple[np.ndarray, float, bool, Dict[str, Any]]: Observation for next timestep, reward obtained, Whether the episode has ended or not, Whether episode has been truncated or not, and a dictionary with extra information
@@ -336,15 +341,14 @@ class EplusEnv(gym.Env):
 
         # timestep +1 and flags initialization
         self.timestep += 1
-        terminated, truncated = False, False
+        terminated = truncated = False
 
         # Check action is correct for environment
         if not self._action_space.contains(action):
-            self.logger.error(
-                f'Invalid action: {action} (check type is np.ndarray with np.float32 values too)')
+            self.logger.error(f'Invalid action: {action}')
             raise ValueError(
                 f'Action {action} is not valid for {
-                    self._action_space} (check type is np.ndarray with np.float32 values too)')
+                    self._action_space}')
 
         # check for simulation errors
         if self.energyplus_simulator.failed():
@@ -384,7 +388,7 @@ class EplusEnv(gym.Env):
         reward, rw_terms = self.reward_fn(obs)
 
         # Update info with
-        info.update({'action': action.tolist(),
+        info.update({'action': action,
                      'timestep': self.timestep,
                      'reward': reward})
         info.update(rw_terms)
@@ -396,8 +400,8 @@ class EplusEnv(gym.Env):
         # self.logger.debug(f'STEP truncated: {truncated}')
         # self.logger.debug(f'STEP info: {info}')
 
-        return np.fromiter(
-            obs.values(), dtype=np.float32), reward, terminated, truncated, info
+        return np.array(list(obs.values()), dtype=np.float32
+                        ), reward, terminated, truncated, info
 
     # ---------------------------------------------------------------------------- #
     #                                RENDER (empty)                                #
@@ -433,7 +437,7 @@ class EplusEnv(gym.Env):
         if len(context_values) != len(self.context):
             self.logger.warning(
                 f'Context values must have the same length than context variables specified, and values must be in the same order. The context space is {
-                    self.context}, but values {context_values} were specified.')
+                    self.context}, but values {context_values} were spevified.')
 
         try:
             self.context_queue.put(context_values, block=False)

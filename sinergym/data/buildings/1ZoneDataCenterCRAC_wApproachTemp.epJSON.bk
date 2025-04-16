@@ -1887,7 +1887,7 @@
     },
     "Timestep": {
         "Timestep 1": {
-            "number_of_timesteps_per_hour": 60
+            "number_of_timesteps_per_hour": 6
         }
     },
     "Version": {

@@ -28,6 +28,7 @@ env = CSVLogger(env)
 
 # Execute 1 episode
 episodes = 1
+print("start test")
 for i in range(episodes):
 
     # Reset the environment to start a new episode
@@ -41,6 +42,7 @@ for i in range(episodes):
 
         # Random action selection
         a = env.action_space.sample()
+        print("action: ", a)
 
         # Perform action and receive env information
         obs, reward, terminated, truncated, info = env.step(a)
@@ -50,9 +52,9 @@ for i in range(episodes):
         # Display results every simulated month
         if info['month'] != current_month:
             current_month = info['month']
-            logger.info('Reward: {}'.format(sum(rewards)))
-            logger.info('Info: {}'.format(info))
+            print('Reward: {}'.format(sum(rewards)))
+            print('Info: {}'.format(info))
 
-    logger.info('Episode {} - Mean reward: {} - Cumulative Reward: {}'.format(i,
+    print('Episode {} - Mean reward: {} - Cumulative Reward: {}'.format(i,
                                                                               np.mean(rewards), sum(rewards)))
 env.close()
