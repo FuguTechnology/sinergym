@@ -57,7 +57,7 @@
             "air_inlet_node_name": "Main Zone ATU In Node",
             "air_outlet_node_name": "Main Zone Inlet Node",
             "availability_schedule_name": "System Availability Schedule",
-            "constant_minimum_air_flow_fraction": 0.05,
+            "constant_minimum_air_flow_fraction": 0.1,
             "maximum_air_flow_rate": 8.5,
             "zone_minimum_air_flow_input_method": "Constant"
         }
@@ -663,10 +663,10 @@
     "Material": {
         "C5 - 4 IN HW CONCRETE": {
             "conductivity": 1.729577,
-            "density": 2242.585,
+            "density": 3000.585,
             "roughness": "MediumRough",
             "solar_absorptance": 0.65,
-            "specific_heat": 836.8,
+            "specific_heat": 1200,
             "thermal_absorptance": 0.9,
             "thickness": 0.1014984,
             "visible_absorptance": 0.65
@@ -1165,7 +1165,7 @@
                     "field": "Until: 24:00"
                 },
                 {
-                    "field": 1.0
+                    "field": 0.8
                 },
                 {
                     "field": "Through: 2/29"
@@ -1237,7 +1237,7 @@
                     "field": "Until: 24:00"
                 },
                 {
-                    "field": 0.1
+                    "field": 0.4
                 },
                 {
                     "field": "Through: 8/31"

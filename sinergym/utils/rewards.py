@@ -43,7 +43,7 @@ class LinearReward(BaseReward):
         summer_final: Tuple[int, int] = (9, 30),
         energy_weight: float = 0.5,
         lambda_energy: float = 1.0,
-        lambda_temperature: float = 1.0
+        lambda_temperature: float = 1.0,
     ):
         """
         Linear reward function.
@@ -81,7 +81,6 @@ class LinearReward(BaseReward):
         # Summer period
         self.summer_start = summer_start  # (month,day)
         self.summer_final = summer_final  # (month,day)
-
         self.logger.info('Reward function initialized.')
 
     def __call__(self, obs_dict: Dict[str, Any]

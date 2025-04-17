@@ -1,0 +1,1485 @@
+AirLoopHVAC,
+  CRAC system,
+  ,
+  CRAC 1 Availability List,
+  8.5,
+  Air Loop Branches,
+  ,
+  Supply Inlet Node,
+  Zone Equipment Outlet Node,
+  Zone Equipment Inlet Node,
+  Supply Outlet Node;
+
+AirLoopHVAC:ReturnPath,
+  Zone Return Air Path,
+  Zone Equipment Outlet Node,
+  AirLoopHVAC:ZoneMixer,
+  Zone Return Air Mixer;
+
+AirLoopHVAC:SupplyPath,
+  Zone Supply Air Path,
+  Zone Equipment Inlet Node,
+  AirLoopHVAC:ZoneSplitter,
+  Zone Supply Air Splitter;
+
+AirLoopHVAC:ZoneMixer,
+  Zone Return Air Mixer,
+  Zone Equipment Outlet Node,
+  Main Zone Outlet Node;
+
+AirLoopHVAC:ZoneSplitter,
+  Zone Supply Air Splitter,
+  Zone Equipment Inlet Node,
+  Main Zone ATU In Node;
+
+AirTerminal:SingleDuct:VAV:NoReheat,
+  Main Zone VAV Air,
+  System Availability Schedule,
+  Main Zone Inlet Node,
+  Main Zone ATU In Node,
+  8.5,
+  Constant,
+  0.05;
+
+AvailabilityManager:Scheduled,
+  CRAC 1 Avail,
+  System Availability Schedule;
+
+AvailabilityManagerAssignmentList,
+  CRAC 1 Availability List,
+  AvailabilityManager:Scheduled,
+  CRAC 1 Avail;
+
+Branch,
+  Air Loop Main Branch,
+  ,
+  CoilSystem:Cooling:DX,
+  DX Cooling Coil System 1,
+  Supply Inlet Node,
+  Main Cooling Coil 1 Outlet Node,
+  Fan:VariableVolume,
+  EC Plug Fan 1,
+  Main Cooling Coil 1 Outlet Node,
+  Supply Outlet Node;
+
+BranchList,
+  Air Loop Branches,
+  Air Loop Main Branch;
+
+Building,
+  Bldg,
+  0.0,
+  Suburbs,
+  0.05,
+  0.05,
+  MinimalShadowing,
+  30,
+  6;
+
+BuildingSurface:Detailed,
+  Zn001:Flr001,
+  Floor,
+  FLOOR,
+  Main Zone,
+  ,
+  Surface,
+  Zn001:Flr001,
+  NoSun,
+  NoWind,
+  1.0,
+  4,
+  15.24,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  15.24,
+  0.0,
+  15.24,
+  15.24,
+  0.0;
+
+BuildingSurface:Detailed,
+  Zn001:Roof001,
+  Roof,
+  ROOF31,
+  Main Zone,
+  ,
+  Outdoors,
+  ,
+  SunExposed,
+  WindExposed,
+  0,
+  4,
+  0.0,
+  15.24,
+  4.572,
+  0.0,
+  0.0,
+  4.572,
+  15.24,
+  0.0,
+  4.572,
+  15.24,
+  15.24,
+  4.572;
+
+BuildingSurface:Detailed,
+  Zn001:Wall001,
+  Wall,
+  R13WALL,
+  Main Zone,
+  ,
+  Outdoors,
+  ,
+  SunExposed,
+  WindExposed,
+  0.5,
+  4,
+  0.0,
+  0.0,
+  4.572,
+  0.0,
+  0.0,
+  0.0,
+  15.24,
+  0.0,
+  0.0,
+  15.24,
+  0.0,
+  4.572;
+
+BuildingSurface:Detailed,
+  Zn001:Wall002,
+  Wall,
+  R13WALL,
+  Main Zone,
+  ,
+  Outdoors,
+  ,
+  SunExposed,
+  WindExposed,
+  0.5,
+  4,
+  15.24,
+  0.0,
+  4.572,
+  15.24,
+  0.0,
+  0.0,
+  15.24,
+  15.24,
+  0.0,
+  15.24,
+  15.24,
+  4.572;
+
+BuildingSurface:Detailed,
+  Zn001:Wall003,
+  Wall,
+  R13WALL,
+  Main Zone,
+  ,
+  Outdoors,
+  ,
+  SunExposed,
+  WindExposed,
+  0.5,
+  4,
+  15.24,
+  15.24,
+  4.572,
+  15.24,
+  15.24,
+  0.0,
+  0.0,
+  15.24,
+  0.0,
+  0.0,
+  15.24,
+  4.572;
+
+BuildingSurface:Detailed,
+  Zn001:Wall004,
+  Wall,
+  R13WALL,
+  Main Zone,
+  ,
+  Outdoors,
+  ,
+  SunExposed,
+  WindExposed,
+  0.5,
+  4,
+  0.0,
+  15.24,
+  4.572,
+  0.0,
+  15.24,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  4.572;
+
+Coil:Cooling:DX:SingleSpeed,
+  Main Cooling Coil 1,
+  System Availability Schedule,
+  148300,
+  0.83,
+  4.5669,
+  8.5,
+  ,
+  934.4,
+  Supply Inlet Node,
+  Main Cooling Coil 1 Outlet Node,
+  Cool Cap Mod func of Temperature,
+  HPACCoolCapFFF,
+  Liebert Econophase EIR Func T,
+  HPACCOOLEIRFFF,
+  HPACCOOLPLFFPLR,
+  ,
+  ,
+  ,
+  ,
+  ,
+  ,
+  ,
+  ,
+  ,
+  ,
+  ,
+  ,
+  ,
+  ,
+  ,
+  ,
+  ,
+  ,
+  ,
+  ,
+  ,
+  Yes;
+
+CoilSystem:Cooling:DX,
+  DX Cooling Coil System 1,
+  System Availability Schedule,
+  Supply Inlet Node,
+  Main Cooling Coil 1 Outlet Node,
+  Main Cooling Coil 1 Outlet Node,
+  Coil:Cooling:DX:SingleSpeed,
+  Main Cooling Coil 1;
+
+Construction,
+  FLOOR,
+  C5 - 4 IN HW CONCRETE;
+
+Construction,
+  R13WALL,
+  R13LAYER;
+
+Construction,
+  ROOF31,
+  R31LAYER;
+
+Curve:Biquadratic,
+  Data Center Recirculation fLoadTemp,
+  1.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  1.5,
+  -10,
+  99.0,
+  0.0,
+  99.0,
+  Dimensionless,
+  Temperature,
+  Dimensionless;
+
+Curve:Biquadratic,
+  Data Center Servers Airflow fLoadTemp,
+  -1.4,
+  0.9,
+  0.0,
+  0.1,
+  0.0,
+  0.0,
+  0.0,
+  1.5,
+  -10,
+  99.0,
+  0.0,
+  99.0,
+  Dimensionless,
+  Temperature,
+  Dimensionless;
+
+Curve:Biquadratic,
+  Data Center Servers Power fLoadTemp,
+  -1.0,
+  1.0,
+  0.0,
+  0.06667,
+  0.0,
+  0.0,
+  0.0,
+  1.5,
+  -10,
+  99.0,
+  0.0,
+  99.0,
+  Dimensionless,
+  Temperature,
+  Dimensionless;
+
+Curve:Biquadratic,
+  Liebert Econophase quadratic fit,
+  0.1416159,
+  0.0,
+  0.0,
+  0.013828452,
+  0.00023872,
+  0.0,
+  12.77778,
+  23.88889,
+  -10,
+  46.11111,
+  0.04,
+  1.4,
+  Temperature,
+  Temperature,
+  Dimensionless;
+
+Curve:Quadratic,
+  ECM FanPower fFlow,
+  0.0,
+  1.0,
+  0.0,
+  0.0,
+  99.0;
+
+Curve:Quadratic,
+  HPACCOOLEIRFFF,
+  1.156,
+  -0.1816,
+  0.0256,
+  0.5,
+  1.5;
+
+Curve:Quadratic,
+  HPACCOOLPLFFPLR,
+  0.85,
+  0.15,
+  0.0,
+  0.0,
+  1.0;
+
+Curve:Quadratic,
+  HPACCoolCapFFF,
+  0.8,
+  0.2,
+  0.0,
+  0.5,
+  1.5;
+
+Curve:Quadratic,
+  UPS Efficiency fPLR,
+  1.0,
+  0.0,
+  0.0,
+  0.0,
+  99.0;
+
+ElectricEquipment:ITE:AirCooled,
+  Data Center Servers,
+  Main Zone,
+  FlowControlWithApproachTemperatures,
+  Watts/Unit,
+  500,
+  100,
+  ,
+  Data Center Operation Schedule,
+  Data Center CPU Loading Schedule,
+  Data Center Servers Power fLoadTemp,
+  0.4,
+  0.0001,
+  Data Center Servers Airflow fLoadTemp,
+  ECM FanPower fFlow,
+  15,
+  A3,
+  AdjustedSupply,
+  ,
+  ,
+  Main Zone Inlet Node,
+  0.1,
+  Data Center Recirculation fLoadTemp,
+  0.9,
+  UPS Efficiency fPLR,
+  1,
+  ITE-CPU,
+  ITE-Fans,
+  ITE-UPS,
+  2,
+  ,
+  -1;
+
+EnergyManagementSystem:GlobalVariable,
+  SCOP,
+  QdotNetSens,
+  PowerCRAC;
+
+EnergyManagementSystem:GlobalVariable,
+  PUE;
+
+EnergyManagementSystem:OutputVariable,
+  CRAC Net Sensible Capacity,
+  QdotNetSens,
+  Averaged,
+  SystemTimestep,
+  ,
+  W;
+
+EnergyManagementSystem:OutputVariable,
+  CRAC SCOP,
+  SCOP,
+  Averaged,
+  SystemTimestep;
+
+EnergyManagementSystem:OutputVariable,
+  CRAC total system Power,
+  PowerCRAC,
+  Averaged,
+  SystemTimestep,
+  ,
+  W;
+
+EnergyManagementSystem:OutputVariable,
+  PUE,
+  PUE,
+  Averaged,
+  SystemTimestep;
+
+EnergyManagementSystem:Program,
+  CalcPUE,
+  IF IT_Equip_power > 0.0,
+  set PUE = whole_building_power / IT_Equip_power,
+  ELSE,
+  set PUE = 0.0,
+  ENDIF;
+
+EnergyManagementSystem:Program,
+  CalcSCOP,
+  set cpair = @CpAirFnW Wout_SupplyFan,
+  set FanSensHeat = (Mdot_SupplyFan * cpair ) * DeltaT_SupplyFan,
+  set numerator = Qdot_DXCoil_Sens - FanSensHeat,
+  set denominator = Power_DX_Coil_Elec + Power_SupplyFan_Elec,
+  Set SCOP = numerator / denominator,
+  Set QdotNetSens = numerator,
+  Set PowerCRAC = denominator;
+
+EnergyManagementSystem:ProgramCallingManager,
+  Calculate Sensible Coefficient of Performance,
+  EndOfZoneTimestepBeforeZoneReporting,
+  CalcSCOP,
+  CalcPUE;
+
+EnergyManagementSystem:Sensor,
+  DeltaT_SupplyFan,
+  EC Plug Fan 1,
+  Fan Rise in Air Temperature;
+
+EnergyManagementSystem:Sensor,
+  IT_Equip_power,
+  Whole Building,
+  Facility Total Building Electricity Demand Rate;
+
+EnergyManagementSystem:Sensor,
+  Mdot_SupplyFan,
+  Supply Outlet Node,
+  System Node Mass Flow Rate;
+
+EnergyManagementSystem:Sensor,
+  Power_DX_Coil_Elec,
+  Main Cooling Coil 1,
+  Cooling Coil Electricity Rate;
+
+EnergyManagementSystem:Sensor,
+  Power_SupplyFan_Elec,
+  EC Plug Fan 1,
+  Fan Electricity Rate;
+
+EnergyManagementSystem:Sensor,
+  Qdot_DXCoil_Sens,
+  Main Cooling Coil 1,
+  Cooling Coil Sensible Cooling Rate;
+
+EnergyManagementSystem:Sensor,
+  Tout_SupplyFan,
+  Supply Outlet Node,
+  System Node Temperature;
+
+EnergyManagementSystem:Sensor,
+  Wout_SupplyFan,
+  Supply Outlet Node,
+  System Node Humidity Ratio;
+
+EnergyManagementSystem:Sensor,
+  whole_building_power,
+  Whole Building,
+  Facility Total Electricity Demand Rate;
+
+Fan:VariableVolume,
+  EC Plug Fan 1,
+  System Availability Schedule,
+  0.7,
+  486.0,
+  8.5,
+  Fraction,
+  0.05,
+  ,
+  0.9,
+  1.0,
+  0.06990146,
+  1.39500612,
+  -3.35487336,
+  2.89232315,
+  0.0,
+  Main Cooling Coil 1 Outlet Node,
+  Supply Outlet Node;
+
+GlobalGeometryRules,
+  UpperLeftCorner,
+  Counterclockwise,
+  World;
+
+HeatBalanceAlgorithm,
+  ConductionTransferFunction;
+
+Material,
+  C5 - 4 IN HW CONCRETE,
+  MediumRough,
+  0.1014984,
+  1.729577,
+  2242.585,
+  836.8,
+  0.9,
+  0.65,
+  0.65;
+
+Material:NoMass,
+  R13LAYER,
+  Rough,
+  2.290965,
+  0.9,
+  0.75,
+  0.75;
+
+Material:NoMass,
+  R31LAYER,
+  Rough,
+  5.456,
+  0.9,
+  0.75,
+  0.75;
+
+Output:Constructions,
+  Constructions;
+
+Output:EnergyManagementSystem,
+  Verbose,
+  Verbose,
+  Verbose;
+
+Output:Meter:MeterFileOnly,
+  Electricity:Facility,
+  Monthly;
+
+Output:Meter:MeterFileOnly,
+  Electricity:HVAC,
+  Monthly;
+
+Output:Meter:MeterFileOnly,
+  Electricity:Facility,
+  RunPeriod;
+
+Output:Meter:MeterFileOnly,
+  Electricity:HVAC,
+  RunPeriod;
+
+Output:SQLite,
+  Simple;
+
+Output:Surfaces:Drawing,
+  DXF;
+
+Output:Table:SummaryReports,
+  AllSummary;
+
+Output:Variable,
+  *,
+  Site Outdoor Air Drybulb Temperature,
+  Hourly;
+
+Output:Variable,
+  *,
+  Site Outdoor Air Wetbulb Temperature,
+  Hourly;
+
+Output:Variable,
+  *,
+  Site Outdoor Air Humidity Ratio,
+  Hourly;
+
+Output:Variable,
+  *,
+  Site Outdoor Air Relative Humidity,
+  Hourly;
+
+Output:Variable,
+  *,
+  Zone Mean Air Temperature,
+  Hourly;
+
+Output:Variable,
+  *,
+  Baseboard Electricity Rate,
+  Hourly;
+
+Output:Variable,
+  *,
+  Performance Curve Input Variable 1 Value,
+  Hourly;
+
+Output:Variable,
+  *,
+  Performance Curve Input Variable 2 Value,
+  Hourly;
+
+Output:Variable,
+  *,
+  Performance Curve Output Value,
+  Hourly;
+
+Output:Variable,
+  *,
+  System Node Temperature,
+  Hourly;
+
+Output:Variable,
+  *,
+  System Node Mass Flow Rate,
+  Hourly;
+
+Output:Variable,
+  *,
+  System Node Setpoint Temperature,
+  Hourly;
+
+Output:Variable,
+  *,
+  System Node Standard Density Volume Flow Rate,
+  Hourly;
+
+Output:Variable,
+  *,
+  System Node Humidity Ratio,
+  Hourly;
+
+Output:Variable,
+  Supply Inlet Node,
+  System Node Dewpoint Temperature,
+  Hourly;
+
+Output:Variable,
+  Main Cooling Coil 1 Outlet Node,
+  System Node Dewpoint Temperature,
+  Hourly;
+
+Output:Variable,
+  Supply Inlet Node,
+  System Node Relative Humidity,
+  Hourly;
+
+Output:Variable,
+  *,
+  Zone Predicted Sensible Load to Cooling Setpoint Heat Transfer Rate,
+  Hourly;
+
+Output:Variable,
+  *,
+  Cooling Coil Total Cooling Rate,
+  Hourly;
+
+Output:Variable,
+  *,
+  Cooling Coil Sensible Cooling Rate,
+  Hourly;
+
+Output:Variable,
+  *,
+  Cooling Coil Latent Cooling Rate,
+  Hourly;
+
+Output:Variable,
+  *,
+  Cooling Coil Electricity Rate,
+  Hourly;
+
+Output:Variable,
+  *,
+  Cooling Coil Runtime Fraction,
+  Hourly;
+
+Output:Variable,
+  *,
+  Coil System Part Load Ratio,
+  Hourly;
+
+Output:Variable,
+  *,
+  Coil System Frost Control Status,
+  Hourly;
+
+Output:Variable,
+  *,
+  Facility Total Building Electricity Demand Rate,
+  Hourly;
+
+Output:Variable,
+  *,
+  Facility Total HVAC Electricity Demand Rate,
+  Hourly;
+
+Output:Variable,
+  *,
+  Facility Total Electricity Demand Rate,
+  Hourly;
+
+Output:Variable,
+  *,
+  Site Outdoor Air Drybulb Temperature,
+  Hourly;
+
+Output:Variable,
+  *,
+  Site Outdoor Air Dewpoint Temperature,
+  Hourly;
+
+Output:Variable,
+  *,
+  Site Outdoor Air Wetbulb Temperature,
+  Hourly;
+
+Output:Variable,
+  *,
+  Fan Electricity Rate,
+  Hourly;
+
+Output:Variable,
+  *,
+  Fan Rise in Air Temperature,
+  Hourly;
+
+Output:Variable,
+  *,
+  Schedule Value,
+  Hourly;
+
+Output:Variable,
+  *,
+  ITE CPU Electricity Rate,
+  Hourly;
+
+Output:Variable,
+  *,
+  ITE Fan Electricity Rate,
+  Hourly;
+
+Output:Variable,
+  *,
+  ITE UPS Electricity Rate,
+  Hourly;
+
+Output:Variable,
+  *,
+  ITE CPU Electricity Rate at Design Inlet Conditions,
+  Hourly;
+
+Output:Variable,
+  *,
+  ITE Fan Electricity Rate at Design Inlet Conditions,
+  Hourly;
+
+Output:Variable,
+  *,
+  ITE UPS Heat Gain to Zone Rate,
+  Hourly;
+
+Output:Variable,
+  *,
+  ITE Total Heat Gain to Zone Rate,
+  Hourly;
+
+Output:Variable,
+  *,
+  ITE Standard Density Air Volume Flow Rate,
+  Hourly;
+
+Output:Variable,
+  *,
+  ITE Air Mass Flow Rate,
+  Hourly;
+
+Output:Variable,
+  *,
+  ITE Air Inlet Dry-Bulb Temperature,
+  Hourly;
+
+Output:Variable,
+  *,
+  ITE Air Inlet Dewpoint Temperature,
+  Hourly;
+
+Output:Variable,
+  *,
+  ITE Air Inlet Relative Humidity,
+  Hourly;
+
+Output:Variable,
+  *,
+  ITE Air Outlet Dry-Bulb Temperature,
+  Hourly;
+
+Output:Variable,
+  *,
+  ITE Supply Heat Index,
+  Hourly;
+
+Output:Variable,
+  *,
+  ITE Air Inlet Operating Range Exceeded Time,
+  Hourly;
+
+Output:Variable,
+  *,
+  ITE Air Inlet Dry-Bulb Temperature Above Operating Range Time,
+  Hourly;
+
+Output:Variable,
+  *,
+  ITE Air Inlet Dry-Bulb Temperature Below Operating Range Time,
+  Hourly;
+
+Output:Variable,
+  *,
+  ITE Air Inlet Dewpoint Temperature Above Operating Range Time,
+  Hourly;
+
+Output:Variable,
+  *,
+  ITE Air Inlet Dewpoint Temperature Below Operating Range Time,
+  Hourly;
+
+Output:Variable,
+  *,
+  ITE Air Inlet Relative Humidity Above Operating Range Time,
+  Hourly;
+
+Output:Variable,
+  *,
+  ITE Air Inlet Relative Humidity Below Operating Range Time,
+  Hourly;
+
+Output:Variable,
+  *,
+  ITE Air Inlet Dry-Bulb Temperature Difference Above Operating Range,
+  Hourly;
+
+Output:Variable,
+  *,
+  ITE Air Inlet Dry-Bulb Temperature Difference Below Operating Range,
+  Hourly;
+
+Output:Variable,
+  *,
+  ITE Air Inlet Dewpoint Temperature Difference Above Operating Range,
+  Hourly;
+
+Output:Variable,
+  *,
+  ITE Air Inlet Dewpoint Temperature Difference Below Operating Range,
+  Hourly;
+
+Output:Variable,
+  *,
+  ITE Air Inlet Relative Humidity Difference Above Operating Range,
+  Hourly;
+
+Output:Variable,
+  *,
+  ITE Air Inlet Relative Humidity Difference Below Operating Range,
+  Hourly;
+
+Output:Variable,
+  *,
+  Zone ITE Adjusted Return Air Temperature,
+  Hourly;
+
+Output:Variable,
+  *,
+  Zone Air Temperature,
+  Hourly;
+
+Output:Variable,
+  *,
+  Zone Air Heat Balance Internal Convective Heat Gain Rate,
+  Hourly;
+
+Output:Variable,
+  *,
+  Zone Air Heat Balance Surface Convection Rate,
+  Hourly;
+
+Output:Variable,
+  *,
+  Zone Air Heat Balance Interzone Air Transfer Rate,
+  Hourly;
+
+Output:Variable,
+  *,
+  Zone Air Heat Balance Outdoor Air Transfer Rate,
+  Hourly;
+
+Output:Variable,
+  *,
+  Zone Air Heat Balance System Air Transfer Rate,
+  Hourly;
+
+Output:Variable,
+  *,
+  Zone Air Heat Balance System Convective Heat Gain Rate,
+  Hourly;
+
+Output:Variable,
+  *,
+  Zone Air Heat Balance Air Energy Storage Rate,
+  Hourly;
+
+Output:Variable,
+  *,
+  CRAC SCOP,
+  Hourly;
+
+Output:Variable,
+  *,
+  CRAC total system Power,
+  Hourly;
+
+Output:Variable,
+  *,
+  CRAC Net Sensible Capacity,
+  Hourly;
+
+Output:Variable,
+  *,
+  PUE,
+  Hourly;
+
+Output:VariableDictionary,
+  regular;
+
+OutputControl:Table:Style,
+  HTML;
+
+RunPeriod,
+  RUNPERIOD 1,
+  1,
+  1,
+  1991,
+  12,
+  31,
+  1991,
+  Tuesday,
+  Yes,
+  Yes,
+  No,
+  Yes,
+  Yes;
+
+Schedule:Compact,
+  Cooling Return Air Setpoint Schedule,
+  Any Number,
+  Through: 12/31,
+  For: AllDays,
+  Until: 24:00,
+  29.3;
+
+Schedule:Compact,
+  Data Center CPU Loading Schedule,
+  Any Number,
+  Through: 1/31,
+  For: AllDays,
+  Until: 24:00,
+  1.0,
+  Through: 2/29,
+  For: AllDays,
+  Until: 24:00,
+  0.5,
+  Through: 3/31,
+  For: AllDays,
+  Until: 24:00,
+  0.75,
+  Through: 4/30,
+  For: AllDays,
+  Until: 24:00,
+  1.0,
+  Through: 5/31,
+  For: AllDays,
+  Until: 24:00,
+  0.25,
+  Through: 6/30,
+  For: AllDays,
+  Until: 24:00,
+  0.5,
+  Through: 7/31,
+  For: AllDays,
+  Until: 24:00,
+  0.1,
+  Through: 8/31,
+  For: AllDays,
+  Until: 24:00,
+  1.0,
+  Through: 9/30,
+  For: AllDays,
+  Until: 24:00,
+  0.25,
+  Through: 10/31,
+  For: AllDays,
+  Until: 24:00,
+  0.5,
+  Through: 11/30,
+  For: AllDays,
+  Until: 24:00,
+  0.75,
+  Through: 12/31,
+  For: AllDays,
+  Until: 24:00,
+  1.0;
+
+Schedule:Compact,
+  Heating Setpoint Schedule,
+  Any Number,
+  Through: 12/31,
+  For: AllDays,
+  Until: 24:00,
+  15.0;
+
+Schedule:Compact,
+  Supply Air Setpoint Schedule,
+  Any Number,
+  Through: 12/31,
+  For: AllDays,
+  Until: 24:00,
+  10.0;
+
+Schedule:Compact,
+  System Availability Schedule,
+  Any Number,
+  THROUGH: 12/31,
+  FOR: AllDays,
+  UNTIL: 24:00,
+  1.0;
+
+Schedule:Compact,
+  Zone Control Type Sched,
+  Any Number,
+  Through: 12/31,
+  For: AllDays,
+  Until: 24:00,
+  4.0;
+
+Schedule:Constant,
+  Data Center Operation Schedule,
+  Any Number,
+  1.0;
+
+ScheduleTypeLimits,
+  Any Number;
+
+ScheduleTypeLimits,
+  Fraction,
+  0.0,
+  1.0,
+  Continuous;
+
+SetpointManager:MixedAir,
+  Coil Exit Temp Manager 1,
+  Temperature,
+  Supply Outlet Node,
+  Main Cooling Coil 1 Outlet Node,
+  Supply Outlet Node,
+  Main Cooling Coil 1 Outlet Node;
+
+SetpointManager:Warmest,
+  Supply air control,
+  Temperature,
+  CRAC system,
+  10.0,
+  25.0,
+  MaximumTemperature,
+  Supply Outlet Node;
+
+SimulationControl,
+  No,
+  No,
+  No,
+  Yes,
+  Yes,
+  No,
+  1;
+
+Site:GroundTemperature:BuildingSurface,
+  18.89,
+  18.92,
+  19.02,
+  19.12,
+  19.21,
+  19.23,
+  19.07,
+  19.32,
+  19.09,
+  19.21,
+  19.13,
+  18.96;
+
+Site:Location,
+  Denver Centennial CO USA WMO=724666,
+  39.74,
+  -105.18,
+  -7.0,
+  1793.0;
+
+SizingPeriod:DesignDay,
+  Denver Centennial Ann Clg 1% Condns DB=>MWB,
+  7,
+  21,
+  SummerDesignDay,
+  32,
+  15.2,
+  ,
+  ,
+  WetBulb,
+  15.5,
+  ,
+  ,
+  ,
+  ,
+  81560.0,
+  4.9,
+  0,
+  No,
+  No,
+  No,
+  ASHRAEClearSky,
+  ,
+  ,
+  ,
+  ,
+  1.0;
+
+SizingPeriod:DesignDay,
+  Denver Centennial Ann Htg 99.6% Condns DB,
+  12,
+  21,
+  WinterDesignDay,
+  -18.8,
+  0.0,
+  ,
+  ,
+  WetBulb,
+  -18.8,
+  ,
+  ,
+  ,
+  ,
+  81560.0,
+  3,
+  340,
+  No,
+  No,
+  No,
+  ASHRAEClearSky,
+  ,
+  ,
+  ,
+  ,
+  0.0;
+
+SurfaceConvectionAlgorithm:Inside,
+  TARP;
+
+SurfaceConvectionAlgorithm:Outside,
+  DOE-2;
+
+Table:IndependentVariable,
+  Cool Cap Mod func of Temperature_IndependentVariable1,
+  Linear,
+  Constant,
+  13.0,
+  23.89,
+  ,
+  Temperature,
+  ,
+  ,
+  ,
+  13.0,
+  17.0,
+  19.4444,
+  21.0,
+  23.9;
+
+Table:IndependentVariable,
+  Cool Cap Mod func of Temperature_IndependentVariable2,
+  Linear,
+  Constant,
+  -10.0,
+  46.0,
+  ,
+  Temperature,
+  ,
+  ,
+  ,
+  -10.0,
+  15.0,
+  18.0,
+  24.0,
+  30.0,
+  35.0,
+  38.0,
+  46.0;
+
+Table:IndependentVariable,
+  Liebert Econophase EIR Func T_IndependentVariable1,
+  Linear,
+  Constant,
+  12.7,
+  23.8,
+  ,
+  Temperature,
+  ,
+  ,
+  ,
+  12.7,
+  23.8;
+
+Table:IndependentVariable,
+  Liebert Econophase EIR Func T_IndependentVariable2,
+  Linear,
+  Constant,
+  -50,
+  50,
+  ,
+  Temperature,
+  ,
+  ,
+  ,
+  -50.0,
+  -4.0,
+  -1.2222,
+  1.5555,
+  4.3333,
+  7.1111,
+  9.8888,
+  12.6667,
+  15.4444,
+  18.222,
+  21.0,
+  23.77778,
+  26.55556,
+  29.33333,
+  32.11111,
+  34.88889,
+  50.0;
+
+Table:IndependentVariableList,
+  Cool Cap Mod func of Temperature_IndependentVariableList,
+  Cool Cap Mod func of Temperature_IndependentVariable1,
+  Cool Cap Mod func of Temperature_IndependentVariable2;
+
+Table:IndependentVariableList,
+  Liebert Econophase EIR Func T_IndependentVariableList,
+  Liebert Econophase EIR Func T_IndependentVariable1,
+  Liebert Econophase EIR Func T_IndependentVariable2;
+
+Table:Lookup,
+  Cool Cap Mod func of Temperature,
+  Cool Cap Mod func of Temperature_IndependentVariableList,
+  ,
+  ,
+  ,
+  ,
+  Dimensionless,
+  ,
+  ,
+  ,
+  1.0,
+  1.0,
+  1.0,
+  0.924738271,
+  0.883909339,
+  0.835522309,
+  0.800222635,
+  0.683109499,
+  1.0,
+  1.0,
+  1.0,
+  1.0,
+  0.976933863,
+  0.937696593,
+  0.907886775,
+  0.805413255,
+  1.0,
+  1.0,
+  1.0,
+  1.0,
+  1.0,
+  1.0,
+  0.9718,
+  0.8782,
+  1.0,
+  1.0,
+  1.0,
+  1.0,
+  1.0,
+  1.0385,
+  1.0142,
+  0.9264,
+  1.0,
+  1.0,
+  1.0,
+  1.0,
+  1.0,
+  1.110828252,
+  1.090488436,
+  1.013268253;
+
+Table:Lookup,
+  Liebert Econophase EIR Func T,
+  Liebert Econophase EIR Func T_IndependentVariableList,
+  ,
+  ,
+  0.03,
+  1.5,
+  Dimensionless,
+  ,
+  ,
+  ,
+  0.042,
+  0.042,
+  0.084,
+  0.084,
+  0.2269,
+  0.2395,
+  0.311,
+  0.3697,
+  0.4454,
+  0.5462,
+  0.6723,
+  0.7227,
+  0.7773,
+  0.8193,
+  0.895,
+  1.0,
+  1.5,
+  0.042,
+  0.042,
+  0.084,
+  0.084,
+  0.2269,
+  0.2395,
+  0.311,
+  0.3697,
+  0.4454,
+  0.5462,
+  0.6723,
+  0.7227,
+  0.7773,
+  0.8193,
+  0.895,
+  1.0,
+  1.5;
+
+ThermostatSetpoint:DualSetpoint,
+  DualSetPoint,
+  Heating Setpoint Schedule,
+  Cooling Return Air Setpoint Schedule;
+
+Timestep,
+  6;
+
+Version,
+  24.2;
+
+Zone,
+  Main Zone,
+  0,
+  0,
+  0,
+  0,
+  1,
+  1,
+  Autocalculate,
+  Autocalculate;
+
+ZoneControl:Thermostat,
+  Main Zone Thermostat,
+  Main Zone,
+  Zone Control Type Sched,
+  ThermostatSetpoint:DualSetpoint,
+  DualSetPoint;
+
+ZoneHVAC:AirDistributionUnit,
+  Main Zone ATU,
+  Main Zone Inlet Node,
+  AirTerminal:SingleDuct:VAV:NoReheat,
+  Main Zone VAV Air;
+
+ZoneHVAC:Baseboard:Convective:Electric,
+  Main Zone Baseboard,
+  System Availability Schedule,
+  HeatingDesignCapacity,
+  8000,
+  ,
+  ,
+  0.97;
+
+ZoneHVAC:EquipmentConnections,
+  Main Zone,
+  Main Zone Equipment,
+  Main Zone Inlet Node,
+  ,
+  Main Zone Node,
+  Main Zone Outlet Node;
+
+ZoneHVAC:EquipmentList,
+  Main Zone Equipment,
+  SequentialLoad,
+  ZoneHVAC:AirDistributionUnit,
+  Main Zone ATU,
+  1.0,
+  2.0,
+  ,
+  ,
+  ZoneHVAC:Baseboard:Convective:Electric,
+  Main Zone Baseboard,
+  2.0,
+  1.0;
+

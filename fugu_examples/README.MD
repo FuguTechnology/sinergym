@@ -10,7 +10,7 @@
 
 IT设备主要参数：100台服务器，每台功率500W， 电源效率0.9
 
-动作空间:制冷回风温度设定值（20,40）,以及风机转速设定值（0,15）
+动作空间:制冷回风温度设定值（16,32）
 
 模拟步长：1分钟
 
@@ -43,5 +43,13 @@ IT设备主要参数：100台服务器，每台功率500W， 电源效率0.9
 
 ### example运行方式
 先根据项目install文档安装docker环境，然后运行的时候挂载修改后的代码到项目/workspaces/sinergym目录下
+```
 docker run --mount type=bind,source=$yourSinergymPath,target=/workspaces/sinergym -it --rm sailugr/sinergym /bin/bash
 python fugu_examples/small_datacenter_examply.py
+```
+
+### v1版本修改
+1.修改模拟步长
+2.动作空间去掉了风机设定值，只保留了温度设定（实测没什么效果）
+3.修改设备功率和比热容调试
+4.奖励方程只考虑温度过高，调整计算参数,添加偏置值
