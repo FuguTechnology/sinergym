@@ -115,6 +115,7 @@ class ExpRewardV2(LinearRewardV2):
         )
 
     def __call__(self, *args, **kwargs):
+        # print(f'args:{args}, kwargs:{kwargs}')
         reward, reward_terms = super().__call__(*args, **kwargs)
         return reward + 10, reward_terms
 

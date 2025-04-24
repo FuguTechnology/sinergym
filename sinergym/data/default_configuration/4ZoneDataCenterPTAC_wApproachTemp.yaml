@@ -1,0 +1,152 @@
+# Documentation: https://ugr-sail.github.io/sinergym/compilation/main/pages/environments_registration.html
+# ---------------------------------------------------------------------------- #
+#                        ID BASE FROM ENVIRONMNET NAMES                        #
+# ---------------------------------------------------------------------------- #
+id_base: largedatacenter
+
+# ---------------------------------------------------------------------------- #
+#                         BUILDING AND WEATHER SETTINGS                        #
+# ---------------------------------------------------------------------------- #
+building_file: 4Zone4ScheduleDatacenter.epJSON
+
+# A environment alternative for each weather key
+weather_specification:
+  weather_files:
+    - CHN_Guangdong.Shenzhen.594930_SWERA.epw
+  keys:
+    - hot
+
+# ---------------------------------------------------------------------------- #
+#                         BUILDING EXTRA CONFIGURATION                         #
+# ---------------------------------------------------------------------------- #
+config_params: null
+
+# ---------------------------------------------------------------------------- #
+#                        WEATHER VARIABILITY (OPTIONAL)                        #
+# ---------------------------------------------------------------------------- #
+# Alternative stochastic environments if it is defined
+weather_variability:
+  Dry Bulb Temperature:
+    - 1.0 # sigma
+    - 0.0 # mu
+    - 24.0 # tau
+
+# ---------------------------------------------------------------------------- #
+#                          EPISODES FOLDER GENERATION                          #
+# ---------------------------------------------------------------------------- #
+max_ep_data_store_num: 3
+
+# ---------------------------------------------------------------------------- #
+#                             OBSERVATION VARIABLES                            #
+# ---------------------------------------------------------------------------- #
+
+# --------------- TIME VARIABLES (same name as EnergyPlus API) --------------- #
+time_variables:
+  - month
+  - day_of_month
+  - hour
+# More variables in Data Transfer API: https://energyplus.readthedocs.io/en/latest/datatransfer.html
+
+# ----------------------------- OUTPUT:VARIABLES ----------------------------- #
+variables:
+  Site Outdoor Air Drybulb Temperature:
+    variable_names: outdoor_temperature
+    keys: Environment
+  Site Outdoor Air Relative Humidity:
+    variable_names: outdoor_humidity
+    keys: Environment
+  Site Wind Speed:
+    variable_names: wind_speed
+    keys: Environment
+  Site Wind Direction:
+    variable_names: wind_direction
+    keys: Environment
+  Zone Air Temperature:
+    variable_names: air_temperature
+    keys:
+      - THERMAL ZONE 1
+      - THERMAL ZONE 2
+      - THERMAL ZONE 3
+      - THERMAL ZONE 4
+  Cooling Coil Total Cooling Energy:
+    variable_names: cooling_energy
+    keys:
+      - ELEC PTAC 1 SPD DX CLG COIL
+      - ELEC PTAC 1 SPD DX CLG COIL 1
+      - ELEC PTAC 1 SPD DX CLG COIL 2
+      - ELEC PTAC 1 SPD DX CLG COIL 3
+  Facility Total HVAC Electricity Demand Rate:
+    variable_names: HVAC_electricity_demand_rate
+    keys: Whole Building
+  Electric Equipment Electricity Energy:
+    variable_names: electricity_equipment_energy
+    keys:
+      - SPACE 101 ELECTRIC EQUIPMENT 5
+      - SPACE 102 ELECTRIC EQUIPMENT 5
+      - SPACE 103 ELECTRIC EQUIPMENT 5
+      - SPACE 104 ELECTRIC EQUIPMENT 5
+
+# ------------------------------- OUTPUT:METERS ------------------------------ #
+meters: {}
+
+# ---------------------------------------------------------------------------- #
+#                               ACTION VARIABLES                               #
+# ---------------------------------------------------------------------------- #
+
+# --------------------------- ACTUATORS TO CONTROL --------------------------- #
+actuators:
+  DataCenter CLGSETP_SCH:
+    variable_name: Cooling_Setpoint
+    element_type: Schedule:Year
+    value_type: Schedule Value
+  DataCenter CLGSETP_SCH 1:
+    variable_name: Cooling_Setpoint_1
+    element_type: Schedule:Year
+    value_type: Schedule Value
+  DataCenter CLGSETP_SCH 2:
+    variable_name: Cooling_Setpoint_2
+    element_type: Schedule:Year
+    value_type: Schedule Value
+  DataCenter CLGSETP_SCH 3:
+    variable_name: Cooling_Setpoint_3
+    element_type: Schedule:Year
+    value_type: Schedule Value
+
+
+# ---------------------------------------------------------------------------- #
+#                   DYNAMIC CONTEXT CONFIGURABLE IN REAL-TIME                  #
+# ---------------------------------------------------------------------------- #
+context: {}
+
+# ---------------------------------------------------------------------------- #
+#                                 ACTIONS SPACE                                #
+# ---------------------------------------------------------------------------- #
+action_space: gym.spaces.Box(low=np.array([16.0, 16.0,16.0,16.0], dtype=np.float32), high=np.array([32.0, 32.0,32.0, 32.0], dtype=np.float32), shape=(4,), dtype=np.float32)
+
+action_space_discrete: gym.spaces.Discrete(10)
+
+# ---------------------------------------------------------------------------- #
+#                                REWARD FUNCTION                               #
+# ---------------------------------------------------------------------------- #
+reward: LinearReward
+
+reward_kwargs:
+  temperature_variables:
+    - west_zone_air_temperature
+  energy_variables:
+    - HVAC_electricity_demand_rate
+  range_comfort_winter:
+    - 18
+    - 27
+  range_comfort_summer:
+    - 18
+    - 27
+  summer_start:
+    - 6
+    - 1
+  summer_final:
+    - 9
+    - 30
+  energy_weight: 0.5
+  lambda_energy: 1.0e-4
+  lambda_temperature: 1.0

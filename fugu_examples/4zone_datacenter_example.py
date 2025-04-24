@@ -31,12 +31,12 @@ if __name__ == "__main__":
     }
 
     # 使用预设好的深圳天气环境模型
-    env = gym.make('Eplus-smalldatacenter-hot-continuous-stochastic-v1', config_params=extra_params,
+    env = gym.make('Eplus-largedatacenter-hot-continuous-stochastic-v1', config_params=extra_params,
                    reward=ExpRewardV2, reward_kwargs={
-            'temperature_variables': ['air_temperature'],
-            'energy_variables': ['cooling_coil_demand_rate', 'fan_demand_rate'],  # 制冷+风扇能耗和
-            'range_comfort_winter': (25.0, 27.0),
-            'range_comfort_summer': (25.0, 27.0),
+            'temperature_variables': ['thermal_zone_1_air_temperature','thermal_zone_2_air_temperature','thermal_zone_3_air_temperature','thermal_zone_4_air_temperature'],
+            'energy_variables': ['HVAC_electricity_demand_rate'],
+            'range_comfort_winter': (24.0, 26.0),
+            'range_comfort_summer': (24.0, 26.0),
             'energy_weight': 0.1,
             'lambda_energy': 0.01,
             'lambda_temperature': 0.1,
@@ -49,7 +49,6 @@ if __name__ == "__main__":
     # env = LoggerWrapper(env)
     # env = CSVLogger(env)
 
-    print("test")
     obs, info = env.reset()
 
     rewards = []
@@ -61,8 +60,6 @@ if __name__ == "__main__":
         # Random action selection
         a = env.action_space.sample()
         # Perform action and receive env information
-
-        a = np.array([0.6], dtype=np.float32)  ## 制冷恒定设置25.6
         step += 1
         obs, reward, terminated, truncated, info = env.step(a)
 
@@ -74,8 +71,11 @@ if __name__ == "__main__":
         info.update(obs_dict)
         print('observation dic:{}'.format(info))
         print('Reward: {}'.format(sum(rewards)))
-
+        # print(
+        #     f'temp:{info['air_temperature']}, set temp:{info['action'][0]}, cooling demand:{info['cooling_coil_demand_rate']}, fan:{info['fan_demand_rate']}')
 
     print('Episode {} - Mean reward: {} - Cumulative Reward: {}'.format(1,
                                                                         np.mean(rewards), sum(rewards)))
     env.close()
+
+
