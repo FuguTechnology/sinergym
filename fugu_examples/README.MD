@@ -115,5 +115,56 @@
     先根据项目install文档安装docker环境，然后运行的时候挂载修改后的代码到项目/workspaces/sinergym目录下
 
     docker run --mount type=bind,source=$yourSinergymPath,target=/workspaces/sinergym -it --rm sailugr/sinergym /bin/bash
-    python fugu_examples/4zone_datacenter_example.py
+    python fugu_examples/4zone_datacenterPTAC_example.py
+
+
+
+## 4热区中央水冷空调大数据中心模拟环境参数
+
+    外部环境:同样使用深圳天气 1分钟控制步长 
+    
+    数据中心尺寸： 约20 * 10 * 5 m³,分为4个热区，公用一套水冷却系统，每个热区有一条独立空气环路
+    4个空间尺寸分别大概为: 
+    THERMAL ZONE 1  11 * 4.5 * 5 m³
+    THERMAL ZONE 2  9 * 4.5 * 5 m³
+    THERMAL ZONE 3  11 * 5.5 * 5 m³
+    THERMAL ZONE 4  9 * 5.5 * 5 m³
+
+    
+    IT设备主要参数：设备功率约400~600W每平方米，灯光约9.6W每立方米
+    
+    动作空间:4区域制冷回风温度设定gym.spaces.Box(low=np.array([10.0, 10.0,10.0,10.0], dtype=np.float32), high=np.array([32.0, 32.0,32.0, 32.0], dtype=np.float32), shape=(4,), dtype=np.float32)
+    注：因为水冷机组的模拟环境中只能直接设定出风温度，不能设定回风温度，所以环境定义中的动作范围是[10,32],但是为了统一控制方式在wrapper中加了一层pid控制将设置的回风温度
+    转为出风温度控制输入到模拟环境，所以实际控制参数[0,1]会转换为对应的回风温度控制[16,32]，然后再经过pid计算得到出风温度输入模拟环境。可以理解为实际的动作空间为16~32的回风温度设置。
+
+    模拟步长：1分钟
+    
+    模拟时限：1年
+    
+    观测空间包含以下值：
+    
+        month: 月份
+        day_of_month: 日期（当月的第几天）
+        hour: 小时
+        outdoor_temperature: 室外空气干球温度
+        outdoor_humidity: 室外空气相对湿度
+        wind_speed: 风速
+        wind_direction: 风向
+        thermal_zone_1_air_temperature: 区域1空气温度
+        thermal_zone_2_air_temperature: 区域2空气温度
+        thermal_zone_3_air_temperature: 区域3空气温度
+        thermal_zone_4_air_temperature: 区域4空气温度
+        space_101_electric_equipment_1_electricity_equipment_energy: 区域1其他设备电力消耗
+        space_102_electric_equipment_1_electricity_equipment_energy: 区域2其他设备电力消耗
+        space_103_electric_equipment_1_electricity_equipment_energy: 区域3其他设备电力消耗
+        space_104_electric_equipment_1_electricity_equipment_energy: 区域4其他设备电力消耗
+        HVAC_electricity_demand_rate: 建筑HVAC总电力需求率
+
+    
+    
+    example运行方式
+    先根据项目install文档安装docker环境，然后运行的时候挂载修改后的代码到项目/workspaces/sinergym目录下
+
+    docker run --mount type=bind,source=$yourSinergymPath,target=/workspaces/sinergym -it --rm sailugr/sinergym /bin/bash
+    python fugu_examples/4zone_datacenterHVAC_example.py
 
